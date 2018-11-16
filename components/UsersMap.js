@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 
 const UsersMap = props => {
 	return(
 		<View style={styles.mapContainer} >
-			<MapView 
+			<MapView
+                provider={ PROVIDER_GOOGLE }
 			    region={props.myLocation} 
 			    showsUserLocation={true}
 				style={styles.map} 
