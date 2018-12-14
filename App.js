@@ -1,4 +1,3 @@
-
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View } from 'react-native';
 
@@ -8,12 +7,16 @@ import FindVideo from './components/FindVideo';
  
 type Props = {};
 
+var GOOGLE_KEY = "AIzaSyD1saWNvYTd_v8sfbPB8puL7fvxKdjcfF0";
+
 export default class App extends Component<Props> {
 
   state = {
     myLocation: null,
-    watchID: null,
-    video_list: null
+    watchID: null, //geolocation Watchposition()
+    video_list: null,
+    markers: [{latitude: 44.494048, longitude: 11.342728, id: 1}, {latitude: 44.493698, longitude:11.343098, id: 2}],//markers: [{latitude: 44.494448, longitude: 11.343005, id: 2}]
+    text_to_read: "ciao sono Piero"
   }
 
   options = {
@@ -32,7 +35,7 @@ export default class App extends Component<Props> {
 
   //PLUS CODES
   searchPlusCodes = () => { 
-    var url = "https://plus.codes/api?address="+ encodeURIComponent(this.state.myLocation.latitude) + "," + encodeURIComponent(this.state.myLocation.longitude) +"&ekey=AIzaSyD1saWNvYTd_v8sfbPB8puL7fvxKdjcfF0";
+    var url = "https://plus.codes/api?address="+ encodeURIComponent(this.state.myLocation.latitude) + "," + encodeURIComponent(this.state.myLocation.longitude) +"&ekey="+ GOOGLE_KEY;
     console.log(url);
     return fetch(url, {
       method: "GET",
@@ -96,46 +99,45 @@ export default class App extends Component<Props> {
     }
   }
 
+  //questa funzione non serve per ora (attenzione: "destination" vuoto)
   getDistance = () => {
-    var url="https://maps.googleapis.com/maps/api/distancematrix/json?origins="+ encodeURIComponent(this.state.myLocation.latitude) + "," + encodeURIComponent(this.state.myLocation.longitude) +"&destinations="+  +"&key=AIzaSyD1saWNvYTd_v8sfbPB8puL7fvxKdjcfF0"
+    var url="https://maps.googleapis.com/maps/api/distancematrix/json?origins="+ encodeURIComponent(this.state.myLocation.latitude) + "," + encodeURIComponent(this.state.myLocation.longitude) +"&destinations="+  +"&key="+ GOOGLE_KEY;
   }
 
-  /*YTFilter = () => { 
-    let ytvid = [];
-    for(var i=0; i < this.state.video_list.length; i++){
-      var url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&key=AIzaSyD1saWNvYTd_v8sfbPB8puL7fvxKdjcfF0&id="+ encodeURIComponent(this.state.video_list[i].id);
+  get_YTdescription = (ytvid, idvid) => { 
+
+      var url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&key="+ GOOGLE_KEY +"&id="+ encodeURIComponent(idvid);
       console.log(url);
-      fetch(url, {
+      return fetch(url, {
         method: "GET",
       })
         .then(res => res.json())
         .then(
-          (data) => { console.log(data); console.log(video_list[i].id);
+          (data) => { 
+            console.log("sono ytdesc"); 
             ytvid.push({
-              id: this.state.video_list[i].id,
-              description: data.items[i].snippet.description
+              id: idvid,
+              description: data.items[0].snippet.description
             });
           } 
         )
         .catch((error) => {
           console.error(error);
         });
-    }
-    this.state.video_list=ytvid;
-  }*/
+  }
 
   //METADATA STRING SEARCH
   YTube = () => { 
     
     //var options = {
      // part: "snippet",
-      //key: "AIzaSyD1saWNvYTd_v8sfbPB8puL7fvxKdjcfF0",
+      //key: "GOOGLE_KEY",
       //type: "video",
       //q: "HooRMI:",  + location coordinates
       //maxResults: ??, consider multiple 'NextPage' http request (set to 10 at the moment)
     //}
     
-    var url="https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&key=AIzaSyD1saWNvYTd_v8sfbPB8puL7fvxKdjcfF0&maxResults=15&q=HooRMI:"  /*encodeURIComponent(this.state.myLocation.city_code)*/;
+    var url="https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&key="+ GOOGLE_KEY +"&maxResults=15&q=HooRMI:"  /*encodeURIComponent(this.state.myLocation.city_code)*/;
     console.log(url);
     return fetch(url, {
       method: "GET",
@@ -145,15 +147,19 @@ export default class App extends Component<Props> {
         (result) => {
           console.log(result);
           //inizializza this.state.video_list
-          this.state.video_list = []; //verifica che pulisca dai risultati precedenti
-          //popola this.state.video_list 
-          for(key in result.items){
-            this.state.video_list.push({
-              id: result.items[key].id.videoId
-            });
+          this.setState({
+            video_list: []
+          }); //verifica che pulisca dai risultati precedenti
+          var ytvid = []; 
+          var promises = [];
+          for(var key in result.items){
+            promises.push(this.get_YTdescription(ytvid, result.items[key].id.videoId));
           }
-          //this.YTFilter();
-          this.printstate();
+          Promise.all(promises).then(() => {
+            this.setState({
+              video_list: ytvid
+            });
+          });
         })
       .catch((error) => {
         console.error(error);
@@ -161,7 +167,8 @@ export default class App extends Component<Props> {
   } 
 
   find_poidata = () => {
-    this.searchPlusCodes().then(() => this.YTube());
+    this.searchPlusCodes()
+      .then(() => this.YTube())
     //this.YTFilter(); .then(() => this.YTFilter())
   }
 
@@ -172,7 +179,7 @@ export default class App extends Component<Props> {
       <Text> HooRMI </Text>
         <FetchLocation onGetLocation={this.initLocationProcedure} />
         <FindVideo findvid={this.find_poidata} />
-        <UsersMap myLocation={this.state.myLocation} />
+        <UsersMap myLocation={this.state.myLocation} poi={this.state.markers} />
       </View>
     );
   }
@@ -187,6 +194,8 @@ const styles = StyleSheet.create({
   }
 });
 
+//geoloc : purpose: language:content [:A + audience][:T + tone ][:P + numero annotazione]
+//8FPHF8VV+57:why:ita:his-art:Agen:Tser:P2
 
 /*
 Add_Query_Parameters Methods but do not work:
