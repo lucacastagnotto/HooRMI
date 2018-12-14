@@ -138,11 +138,8 @@ android {
 }
 
 dependencies {
-<<<<<<< HEAD
+
     compile project(':react-native-tts')
-    compile project(':react-native-voice')
-=======
->>>>>>> ea50577fbf5ef311ed51c60be83a6685f6ffba62
     compile project(':react-native-maps')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"

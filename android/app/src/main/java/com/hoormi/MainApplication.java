@@ -3,11 +3,7 @@ package com.hoormi;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-<<<<<<< HEAD
 import net.no_mad.tts.TextToSpeechPackage;
-import com.wenkesj.voice.VoicePackage;
-=======
->>>>>>> ea50577fbf5ef311ed51c60be83a6685f6ffba62
 import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -30,14 +26,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-<<<<<<< HEAD
-            new TextToSpeechPackage(),
-            new VoicePackage(),
-            new MapsPackage()
-=======
-            new MapsPackage(),
+          new TextToSpeechPackage(),
           new MapsPackage()
->>>>>>> ea50577fbf5ef311ed51c60be83a6685f6ffba62
       );
     }
 

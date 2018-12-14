@@ -54,7 +54,6 @@ export default UsersMap;
 in order to enable geolocation in the background, you need to 
 	add location as a background mode in the 'Capabilities' tab in Xcode.
 */
-<<<<<<< HEAD
 
 /*
 			{set_markers}
@@ -69,5 +68,3 @@ in order to enable geolocation in the background, you need to
         		mode="walking"
 			/>
  */
-=======
->>>>>>> ea50577fbf5ef311ed51c60be83a6685f6ffba62
