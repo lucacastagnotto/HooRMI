@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "postinstall": "./node_modules/react-native-maps/enable-google-maps ios",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
@@ -11,8 +12,7 @@
     "react-native": "^0.57.4",
     "react-native-maps": "^0.22.0",
     "react-native-maps-directions": "^1.6.0",
-    "react-native-tts": "^2.0.0",
-    "react-native-voice": "^0.2.6"
+    "react-native-tts": "^2.0.0"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",

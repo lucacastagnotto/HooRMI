@@ -1,8 +1,11 @@
 rootProject.name = 'hoormi'
+<<<<<<< HEAD
 include ':react-native-tts'
 project(':react-native-tts').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-tts/android')
 include ':react-native-voice'
 project(':react-native-voice').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-voice/android')
+=======
+>>>>>>> ea50577fbf5ef311ed51c60be83a6685f6ffba62
 include ':react-native-maps'
 project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/lib/android')
 
