@@ -7,7 +7,7 @@ import FindVideo from './components/FindVideo';
  
 type Props = {};
 
-var GOOGLE_KEY = "AIzaSyD1saWNvYTd_v8sfbPB8puL7fvxKdjcfF0";
+var GOOGLE_KEY = "";
 
 export default class App extends Component<Props> {
 
