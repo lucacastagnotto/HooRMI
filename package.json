@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "react": "16.6.0-alpha.8af6728",
-    "react-native": "^0.57.4",
+    "react-native": "^0.70.2",
     "react-native-maps": "^0.22.0",
     "react-native-maps-directions": "^1.6.0",
     "react-native-tts": "^2.0.0"
